@@ -8,11 +8,9 @@
                      :artist/name artist-name}]))
 
 (defn add-album [album-title artist-name]
-  (let [id (d/tempid :db.part/user)]
-    @(d/transact conn [{:db/id id
-                        :album/title album-title}
-                       {:db/id id
-                        :album/artists (get-artist-id artist-name)}])))
+  @(d/transact conn [{:db/id #db/id[:db.part/user]
+                      :album/title album-title
+                      :album/artists (get-artist-id artist-name)}]))
 
 (defn add-example-data []
   (add-artist "Eric Clapton")

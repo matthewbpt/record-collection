@@ -2,6 +2,7 @@
  :db/ident :artist/name
  :db/valueType :db.type/string
  :db/cardinality :db.cardinality/one
+  :db/unique :db.unique/identity
  :db/doc "An artist's name"
  :db.install/_attribute :db.part/db}
 
@@ -44,19 +45,34 @@
   :db/ident :album/artists
   :db/valueType :db.type/ref
   :db/cardinality :db.cardinality/many
-  :db/doc "An album's artist's"
+  :db/doc "An album's artists"
   :db.install/_attribute :db.part/db}
 
  {:db/id #db/id[:db.part/db]
   :db/ident :album/genres
   :db/valueType :db.type/ref
   :db/cardinality :db.cardinality/many
-  :db/doc "An album's genre's"
+  :db/doc "An album's genres"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :album/type
+  :db/valueType :db.type/ref
+  :db/cardinality :db.cardinality/one
+  :db/doc "Album type, eg LP or single"
   :db.install/_attribute :db.part/db}
 
  {:db/id #db/id[:db.part/db]
   :db/ident :genre/name
-  :db/valueType :db.type/string
+  :db/valueType :db.type/ref
   :db/cardinality :db.cardinality/one
+  :db/unique :db.unique/identity
   :db/doc "A genre"
-  :db.install/_attribute :db.part/db}]
+  :db.install/_attribute :db.part/db}
+
+ [:db/add #db/id[:db.part/user] :db/ident :artist.type/person]
+ [:db/add #db/id[:db.part/user] :db/ident :artist.type/group]
+ [:db/add #db/id[:db.part/user] :db/ident :artist.type/other]
+ [:db/add #db/id[:db.part/user] :db/ident :album.type/LP]
+ [:db/add #db/id[:db.part/user] :db/ident :album.type/single]
+ [:db/add #db/id[:db.part/user] :db/ident :album.type/other]]

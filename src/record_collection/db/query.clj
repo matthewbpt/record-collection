@@ -3,29 +3,30 @@
             [record-collection.db.core :refer :all]))
 
 (defn get-artists []
-  (d/q '[:find ?artist-name
-         :where [?aid :artist/name ?artist-name]]
-       (d/db conn)))
+  (let [artists (d/q '[:find ?aid ?artist-name
+                       :where [?aid :artist/name ?artist-name]]
+                     (d/db conn))]
+    (map (fn [row] (let [[id artist] row] {:id id :name artist})) artists)))
 
 (defn get-artist-id [artist-name]
-  (ffirst (d/q '[:find ?aid
+  (d/q '[:find ?aid .
                  :in $ ?artist-name
                  :where [?aid :artist/name ?artist-name]]
                (d/db conn)
-               artist-name)))
+               artist-name))
 
 (defn get-artist-name-from-id [id]
-  (ffirst (d/q '[:find ?artist-name
+  (d/q '[:find ?artist-name .
                  :in $ ?aid
                  :where [?aid :artist/name ?artist-name]]
                (d/db conn)
-               id)))
+               id))
 
 (defn get-albums [artist-name]
-  (d/q '[:find ?album-title
-         :in $ ?artist-name
-         :where [?aid :album/title ?album-title]
-                [?aid :album/artists ?eid]
-                [?eid :artist/name ?artist-name]]
-       (d/db conn)
-       artist-name))
+  (map (fn [[a,b]] {:id a :name b}) (d/q '[:find ?aid ?album-title
+                                           :in $ ?artist-name
+                                           :where [?eid :artist/name ?artist-name]
+                                           [?aid :album/artists ?eid]
+                                           [?aid :album/title ?album-title]]
+                                         (d/db conn)
+                                         artist-name)))

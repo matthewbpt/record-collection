@@ -11,6 +11,9 @@
                       :chief [{:name String
                                :type #{{:id String}}}]})
 
+(s/defschema Entity {:id Long
+                     :name String})
+
 (defapi service-routes
   (ring.swagger.ui/swagger-ui
    "/swagger-ui")
@@ -21,14 +24,13 @@
             :tags ["thingie"]
 
             (GET* "/artists" []
-                  (ok (let [artists (get-artists)]
-                        (do
-                          (println (into [] artists))
-                          artists))))
+                  :return [Entity]
+                  (get-artists))
 
             (GET* "/artist/:name/albums" []
-                   :path-params [name :- String]
-                   (ok (get-albums name)))
+                  :return [Entity]
+                  :path-params [name :- String]
+                  (ok (get-albums name)))
 
             (GET* "/plus" []
                   :return       Long

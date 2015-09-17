@@ -14,12 +14,16 @@
       (d/transact conn schema)
       conn)))
 
-(expect #{["John"]}
+;; expect adding three artists to yield three artists in the database
+(expect #{ "John" "Paul" "George" }
         (with-redefs [conn (create-empty-in-memory-db)]
           (do
             (add-artist "John")
-            (get-artists))))
+            (add-artist "Paul")
+            (add-artist "George")
+            (set (map #(:name %) (get-artists))))))
 
+;; expect getting artist from id to yield correct artist
 (expect "John"
             (with-redefs [conn (create-empty-in-memory-db)]
               (do
@@ -27,7 +31,8 @@
                 (let [id (get-artist-id "John")]
                   (get-artist-name-from-id id)))))
 
-(expect #{["Slowhand"] ["461 Ocean Boulevard" ]}
+;; get albums for an artist should yield only that artist's albums
+(expect #{"Slowhand" "461 Ocean Boulevard"}
         (with-redefs [conn (create-empty-in-memory-db)]
           (do
             (add-artist "Eric Clapton")
@@ -35,4 +40,13 @@
             (add-album "Slowhand" "Eric Clapton")
             (add-album "461 Ocean Boulevard" "Eric Clapton")
             (add-album "Test" "John")
-            (get-albums "Eric Clapton"))))
+            (set (map #(:name %) (get-albums "Eric Clapton"))))))
+
+;; artist is unique, so adding same artist multiple times should
+;; only result in one artist of that name existing
+(expect #{"John"}
+        (with-redefs [conn (create-empty-in-memory-db)]
+          (do
+            (add-artist "John")
+            (add-artist "John")
+            (set (map #(:name %) (get-artists))))))
