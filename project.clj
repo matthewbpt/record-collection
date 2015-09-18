@@ -34,7 +34,9 @@
                  [org.immutant/web "2.1.0"]
                  [com.datomic/datomic-free "0.9.5206"
                   :exclusions [joda-time]]
-                 [expectations "2.1.3"]]
+                 [expectations "2.1.3"]
+                 [re-frame "0.4.1"]
+                 [cljs-http "0.1.37"]]
 
   :min-lein-version "2.0.0"
   :uberjar-name "record-collection.jar"
