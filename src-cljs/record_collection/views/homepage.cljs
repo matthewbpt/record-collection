@@ -19,7 +19,7 @@
 
 (defn artist-row []
   (fn [artist]
-    [:tr
+    [:tr {:on-click #(dispatch [:get-albums (:name artist)])}
      [:td.col-md-2 (:name artist)]]))
 
 (defn artists []
