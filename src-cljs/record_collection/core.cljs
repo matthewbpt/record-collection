@@ -5,8 +5,11 @@
             [goog.events :as events]
             [goog.history.EventType :as EventType]
             [markdown.core :refer [md->html]]
-            [ajax.core :refer [GET POST]])
+            [ajax.core :refer [GET POST]]
+            [record-collection.api :refer [init]]
+            [record-collection.views.homepage :refer [artists]])
   (:import goog.History))
+
 
 (defn nav-link [uri title page collapsed?]
   [:li {:class (when (= page (session/get :page)) "active")}
@@ -45,18 +48,7 @@
 
 (defn home-page []
   [:div.container
-   [:div.jumbotron
-    [:h1 "Welcome to record-collection, where your record collection dreams come true!"]
-    [:p "Time to start building your site!"]
-    [:p [:a.btn.btn-primary.btn-lg {:href "http://luminusweb.net"} "Learn more »"]]]
-   [:div.row
-    [:div.col-md-12
-     [:h2 "Welcome to ClojureScript"]]]
-   (when-let [docs (session/get :docs)]
-     [:div.row
-      [:div.col-md-12
-       [:div {:dangerouslySetInnerHTML
-              {:__html (md->html docs)}}]]])])
+   [artists]])
 
 (def pages
   {:home #'home-page
@@ -86,16 +78,14 @@
               (secretary/dispatch! (.-token event))))
         (.setEnabled true)))
 
+(init)
+
 ;; -------------------------
 ;; Initialize app
-(defn fetch-docs! []
-  (GET "/docs" {:handler #(session/put! :docs %)}))
-
 (defn mount-components []
   (reagent/render [#'navbar] (.getElementById js/document "navbar"))
   (reagent/render [#'page] (.getElementById js/document "app")))
 
 (defn init! []
-  (fetch-docs!)
   (hook-browser-navigation!)
   (mount-components))
