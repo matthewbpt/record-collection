@@ -7,7 +7,7 @@
             [markdown.core :refer [md->html]]
             [ajax.core :refer [GET POST]]
             [record-collection.api :refer [init]]
-            [record-collection.views.homepage :refer [artists]])
+            [record-collection.views.homepage :refer [artists search]])
   (:import goog.History))
 
 
@@ -48,6 +48,7 @@
 
 (defn home-page []
   [:div.container
+   [(search :filter)]
    [artists]])
 
 (def pages

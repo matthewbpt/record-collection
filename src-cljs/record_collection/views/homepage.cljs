@@ -3,11 +3,19 @@
                                    dispatch-sync
                                    subscribe]]))
 
+(defn change-trigger [key]
+  (fn [event]
+    (dispatch [key (-> event .-target .-value)])))
+
+(defn search [key]
+  (fn []
+    [:div {:class "search"}
+     [:input {:placeholder "Enter Search"
+              :on-change  (change-trigger key)}]]))
 
 (defn artists-header []
-  (fn []
-    [:thead
-     [:th.col-md-2 "Artists"]]))
+  [:div [:thead
+         [:th.col-md-2 "Artists"]]])
 
 (defn artist-row []
   (fn [artist]
@@ -15,7 +23,7 @@
      [:td.col-md-2 (:name artist)]]))
 
 (defn artists []
-  (let [artists (subscribe [:current-artists])]
+  (let [artists (subscribe [:filtered-artists])]
     (fn []
       [:div
        [:div

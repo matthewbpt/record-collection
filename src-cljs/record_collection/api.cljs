@@ -22,6 +22,20 @@
   (fn [db [_ artists]]
     (merge db {:current-artists artists})))
 
+(register-sub
+  :filtered-artists
+  (fn [db [_]]
+    (reaction (let [items (:current-artists @db)
+                   s (:filter @db)]
+               (if (empty? s)
+                 items
+                 (vec (filter #(> (.indexOf (-> % :name .toLowerCase) (.toLowerCase s)) -1) items)))))))
+
+(register-handler
+  :filter
+  (fn [db [_ filter]]
+    (merge db { :filter filter })))
+
 (register-handler
   :get-artists
   (fn [db _]
