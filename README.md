@@ -1,6 +1,6 @@
-# record-collection
+# record-collection [![Build Status](https://travis-ci.org/matthewbpt/record-collection.svg)](https://travis-ci.org/matthewbpt/record-collection)
 
-FIXME
+Web application for viewing managing my record collection. Using a datomic database with Clojure and the Luminus framework on the backend, and ClojureScript with re-frame on the frontend.
 
 ## Prerequisites
 
@@ -10,10 +10,12 @@ You will need [Leiningen][1] 2.0 or above installed.
 
 ## Running
 
-To start a web server for the application, run:
+To start hacking, run
 
-    lein run
+    lein figwheel
 
 ## License
 
-Copyright © 2015 FIXME
+BSD 2-Clause
+
+Copyright © 2015 matthewbpt
