@@ -1,0 +1,60 @@
+[{:db/id #db/id[:db.part/user -1000001]
+  :artist/name "Eric Clapton"
+  :artist/sortName "Eric Clapton"
+  :artist/bio "Lorem ipsum blah etc"
+  :artist/type :artist.type/person}
+
+ {:db/id #db/id[:db.part/user -1000002]
+  :album/title "Slowhand"
+  :album/year 1977
+  :album/type :album.type/LP
+  :album/artists #db/id[:db.part/user -1000001]}
+
+ {:db/id #db/id[:db.part/user -1000003]
+  :album/title "461 Ocean Boulevard"
+  :album/year 1974
+  :album/type :album.type/LP
+  :album/artists #db/id[:db.part/user -1000001]}
+
+ {:db/id #db/id[:db.part/user -1000004]
+  :artist/name "Van Morrison"
+  :artist/sortName "Van Morrison"
+  :artist/bio "Lorem ipsum blah etc"
+  :artist/type :artist.type/person}
+
+ {:db/id #db/id[:db.part/user -1000005]
+  :album/title "Astral Weeks"
+  :album/year 1968
+  :album/type :album.type/LP
+  :album/artists #db/id[:db.part/user -1000004]}
+
+ {:db/id #db/id[:db.part/user -1000006]
+  :album/title "Moondance"
+  :album/year 1968
+  :album/type :album.type/LP
+  :album/artists #db/id[:db.part/user -1000004]}
+
+ {:db/id #db/id[:db.part/user -1000007]
+  :artist/name "Santana"
+  :artist/sortName "Santana"
+  :artist/bio "Lorem ipsum blah etc"
+  :artist/type :artist.type/person}
+
+ {:db/id #db/id[:db.part/user -1000008]
+  :artist/name "Porcupine Tree"
+  :artist/sortName "Porcupine Tree"
+  :artist/bio "Lorem ipsum blah etc"
+  :artist/type :artist.type/person}
+
+ {:db/id #db/id[:db.part/user]
+  :album/title "Deadwing"
+  :album/year 1968
+  :album/type :album.type/LP
+  :album/artists #db/id[:db.part/user -1000008]}
+
+ {:db/id #db/id[:db.part/user]
+  :album/title "Stupid Dream"
+  :album/year 1968
+  :album/type :album.type/LP
+  :album/artists #db/id[:db.part/user -1000008]}
+ ]

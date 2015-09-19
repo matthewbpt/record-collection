@@ -89,4 +89,5 @@
  [:db/add #db/id[:db.part/user] :db/ident :artist.type/other]
  [:db/add #db/id[:db.part/user] :db/ident :album.type/LP]
  [:db/add #db/id[:db.part/user] :db/ident :album.type/single]
- [:db/add #db/id[:db.part/user] :db/ident :album.type/other]]
+ [:db/add #db/id[:db.part/user] :db/ident :album.type/other]
+ ]

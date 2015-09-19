@@ -8,3 +8,5 @@
 (def conn (d/connect uri))
 
 (d/transact conn (load-file "resources/datomic/schema.edn"))
+
+(d/transact conn (load-file "resources/datomic/sample_data.edn"))

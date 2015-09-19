@@ -32,11 +32,6 @@
           @items
           (vec (filter #(> (.indexOf (-> % :name .toLowerCase) (.toLowerCase @s)) -1) @items)))))))
 
-(register-sub
-  :albums
-  (fn [db [_]]
-    (reaction (get-in @db :albums))))
-
 (register-handler
   :filter
   (fn [db [_ filter]]
@@ -51,11 +46,6 @@
           (if (= status 200)
             (dispatch [:current-artists artists]))))
     db))
-
-(register-handler
-  :albums
-  (fn [db [_ albums]]
-    (merge db { :albums albums })))
 
 (register-handler
   :get-albums

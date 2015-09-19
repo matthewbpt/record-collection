@@ -2,11 +2,19 @@
   (:require [datomic.api :as d]
             [record-collection.db.core :refer :all]))
 
+(defn- match-artist-attrs
+  [{id :db/id name :artist/name bio :artist/bio}]
+    {:id id :name name :bio bio})
+
+(defn- match-album-attrs
+  [{id :db/id title :album/title year :album/year}]
+    {:id id :title title :year year})
+
 (defn get-artists []
-  (let [artists (d/q '[:find ?aid ?artist-name
-                       :where [?aid :artist/name ?artist-name]]
+  (let [artists (d/q '[:find  [(pull ?aid [:db/id :artist/name :artist/bio]) ...]                              ;?aid ?artist-name ?bio
+                       :where [?aid :artist/name _]]
                      (d/db conn))]
-    (map (fn [[a, b]] {:id a :name b}) artists)))
+    (map match-artist-attrs artists)))
 
 (defn get-artist-id [artist-name]
   (d/q '[:find ?aid .
@@ -23,12 +31,10 @@
        id))
 
 (defn get-albums [artist-name]
-  (let [albums (d/q '[:find ?aid ?album-title
+  (let [albums (d/q '[:find [(pull ?aid [:db/id :album/title :album/year]) ...]                                ;?aid ?album-title ?year
                      :in $ ?artist-name
                      :where [?eid :artist/name ?artist-name]
-                     [?aid :album/artists ?eid]
-                     [?aid :album/title ?album-title]]
+                            [?aid :album/artists ?eid]]
                    (d/db conn)
                    artist-name)]
-    (map (fn [[a, b]] {:id a :name b})
-         albums)))
+    (map match-album-attrs albums)))

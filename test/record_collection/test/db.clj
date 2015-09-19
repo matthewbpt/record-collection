@@ -40,7 +40,7 @@
             (add-album "Slowhand" "Eric Clapton")
             (add-album "461 Ocean Boulevard" "Eric Clapton")
             (add-album "Test" "John")
-            (set (map #(:name %) (get-albums "Eric Clapton"))))))
+            (set (map #(:title %) (get-albums "Eric Clapton"))))))
 
 ;; artist is unique, so adding same artist multiple times should
 ;; only result in one artist of that name existing
