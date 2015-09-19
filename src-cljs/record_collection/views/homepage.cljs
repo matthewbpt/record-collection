@@ -3,7 +3,7 @@
                                    dispatch-sync
                                    subscribe]]))
 
-(defn change-trigger [key]
+(defn on-event-trigger [key]
   (fn [event]
     (dispatch [key (-> event .-target .-value)])))
 
@@ -11,7 +11,7 @@
   (fn []
     [:div {:class "search"}
      [:input {:placeholder "Enter Search"
-              :on-change  (change-trigger key)}]]))
+              :on-change  (on-event-trigger key)}]]))
 
 (defn artists-header []
   [:div [:thead

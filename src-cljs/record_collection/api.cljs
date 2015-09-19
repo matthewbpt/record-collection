@@ -17,6 +17,15 @@
 
 (register-flat-sub :current-artists :current-artists)
 
+;;(register-flat-sub :albums :albums)
+
+(register-sub
+  :albums
+  (fn [db [_ {id :id}]]
+    (let [albums (reaction (:albums @db))
+          filtered-albums (reaction (filter #(contains? (set (:artists %)) id) @albums))]
+      (reaction @filtered-albums))))
+
 (register-handler
   :current-artists
   (fn [db [_ artists]]
@@ -31,6 +40,12 @@
         (if (empty? @s)
           @items
           (vec (filter #(> (.indexOf (-> % :name .toLowerCase) (.toLowerCase @s)) -1) @items)))))))
+
+(register-sub
+  :artist
+  (fn [db [_ artist-name]]
+    (let [items (reaction (:current-artists @db))]
+      (reaction (first (filter #(= (:name %) artist-name) @items))))))
 
 (register-handler
   :filter
@@ -48,14 +63,23 @@
     db))
 
 (register-handler
+  :albums
+  (fn [db [_ albums]]
+    (merge db {:albums albums})))
+
+(register-handler
   :get-albums
   (fn [db [_ artist]]
-    (go (let [response (<! (http/get (str "/api/artist/" artist "/albums")))
-              albums (:body response)
-              status (:status response)]
-          (if (= status 200)
-            (dispatch [:albums albums]))))
+    (let [url (if (nil? artist)
+                "/api/albums"
+                (str "/api/artist/" artist "/albums"))]
+      (go (let [response (<! (http/get url))
+                albums (:body response)
+                status (:status response)]
+            (if (= status 200)
+              (dispatch [:albums albums])))))
     db))
 
 (defn init []
-  (dispatch [:get-artists]))
+  (dispatch [:get-artists])
+  (dispatch [:get-albums nil]))

@@ -7,8 +7,8 @@
     {:id id :name name :bio bio})
 
 (defn- match-album-attrs
-  [{id :db/id title :album/title year :album/year}]
-    {:id id :title title :year year})
+  [{id :db/id title :album/title year :album/year artists :album/artists}]
+    {:id id :title title :year year :artists (set (map :db/id artists))})
 
 (defn get-artists []
   (let [artists (d/q '[:find  [(pull ?aid [:db/id :artist/name :artist/bio]) ...]                              ;?aid ?artist-name ?bio
@@ -30,11 +30,17 @@
        (d/db conn)
        id))
 
-(defn get-albums [artist-name]
-  (let [albums (d/q '[:find [(pull ?aid [:db/id :album/title :album/year]) ...]                                ;?aid ?album-title ?year
-                     :in $ ?artist-name
-                     :where [?eid :artist/name ?artist-name]
-                            [?aid :album/artists ?eid]]
-                   (d/db conn)
-                   artist-name)]
-    (map match-album-attrs albums)))
+(defn get-albums
+  ([]
+   (let [albums (d/q '[:find [(pull ?aid [*]) ...]
+                       :where [?aid :album/artists _]]
+                     (d/db conn))]
+     (map match-album-attrs albums)))
+  ([artist-name]
+   (let [albums (d/q '[:find [(pull ?aid [*]) ...]                                ;?aid ?album-title ?year
+                       :in $ ?artist-name
+                       :where [?eid :artist/name ?artist-name]
+                              [?aid :album/artists ?eid]]
+                     (d/db conn)
+                     artist-name)]
+     (map match-album-attrs albums))))

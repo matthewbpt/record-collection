@@ -17,16 +17,17 @@
 
 (s/defschema Album {:id Long
                      :title String
-                     :year Long})
+                     :year Long
+                    :artists #{Long}})
 
 (defapi service-routes
   (ring.swagger.ui/swagger-ui
    "/swagger-ui")
   ;JSON docs available at the /swagger.json route
   (swagger-docs
-    {:info {:title "Sample api"}})
+    {:info {:title "Record Collection"}})
   (context* "/api" []
-            :tags ["thingie"]
+            :tags ["API"]
 
             (GET* "/artists" []
                   :return [Artist]
@@ -37,47 +38,52 @@
                   :path-params [name :- String]
                   (ok (get-albums name)))
 
-            (GET* "/plus" []
-                  :return       Long
-                  :query-params [x :- Long, {y :- Long 1}]
-                  :summary      "x+y with query-parameters. y defaults to 1."
-                  (ok (+ x y)))
+            (GET* "/albums" []
+                  :return [Album]
+                  (ok (get-albums)))
 
-            (POST* "/minus" []
-                   :return      Long
-                   :body-params [x :- Long, y :- Long]
-                   :summary     "x-y with body-parameters."
-                   (ok (- x y)))
-
-            (GET* "/times/:x/:y" []
-                  :return      Long
-                  :path-params [x :- Long, y :- Long]
-                  :summary     "x*y with path-parameters"
-                  (ok (* x y)))
-
-            (POST* "/divide" []
-                   :return      Double
-                   :form-params [x :- Long, y :- Long]
-                   :summary     "x/y with form-parameters"
-                   (ok (/ x y)))
-
-            (GET* "/power" []
-                  :return      Long
-                  :header-params [x :- Long, y :- Long]
-                  :summary     "x^y with header-parameters"
-                  (ok (long (Math/pow x y))))
-
-            (PUT* "/echo" []
-                  :return   [{:hot Boolean}]
-                  :body     [body [{:hot Boolean}]]
-                  :summary  "echoes a vector of anonymous hotties"
-                  (ok body))
-
-            (POST* "/echo" []
-                   :return   (s/maybe Thingie)
-                   :body     [thingie (s/maybe Thingie)]
-                   :summary  "echoes a Thingie from json-body"
-                   (ok thingie)))
+            ;(GET* "/plus" []
+            ;      :return       Long
+            ;      :query-params [x :- Long, {y :- Long 1}]
+            ;      :summary      "x+y with query-parameters. y defaults to 1."
+            ;      (ok (+ x y)))
+            ;
+            ;(POST* "/minus" []
+            ;       :return      Long
+            ;       :body-params [x :- Long, y :- Long]
+            ;       :summary     "x-y with body-parameters."
+            ;       (ok (- x y)))
+            ;
+            ;(GET* "/times/:x/:y" []
+            ;      :return      Long
+            ;      :path-params [x :- Long, y :- Long]
+            ;      :summary     "x*y with path-parameters"
+            ;      (ok (* x y)))
+            ;
+            ;(POST* "/divide" []
+            ;       :return      Double
+            ;       :form-params [x :- Long, y :- Long]
+            ;       :summary     "x/y with form-parameters"
+            ;       (ok (/ x y)))
+            ;
+            ;(GET* "/power" []
+            ;      :return      Long
+            ;      :header-params [x :- Long, y :- Long]
+            ;      :summary     "x^y with header-parameters"
+            ;      (ok (long (Math/pow x y))))
+            ;
+            ;(PUT* "/echo" []
+            ;      :return   [{:hot Boolean}]
+            ;      :body     [body [{:hot Boolean}]]
+            ;      :summary  "echoes a vector of anonymous hotties"
+            ;      (ok body))
+            ;
+            ;(POST* "/echo" []
+            ;       :return   (s/maybe Thingie)
+            ;       :body     [thingie (s/maybe Thingie)]
+            ;       :summary  "echoes a Thingie from json-body"
+            ;       (ok thingie))
+            )
 
   ;(context* "/context" []
   ;          :tags ["context*"]

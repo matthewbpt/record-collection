@@ -54,8 +54,9 @@
    [artists]])
 
 (defn artist-page []
-  [:div.container
-   [artist-view]])
+  (let [artist-name (session/get! :artist)]
+    [:div.container
+     [artist-view artist-name]]))
 
 (def pages
   {:home #'home-page
@@ -76,7 +77,7 @@
   (session/put! :page :about))
 
 (secretary/defroute "/artist/:artist" [artist]
-                    ;(dispatch [:selected-artist artist])
+  (session/put! :artist artist)
   (session/put! :page :artist))
 
 ;; -------------------------

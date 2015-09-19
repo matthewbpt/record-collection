@@ -11,7 +11,7 @@
 
 (defn albums [artist]
   (fn [artist]
-    (let [albums (:albums artist)]
+    (let [albums (subscribe [:albums artist])]
       [:div
        [:div
         [:table.table
@@ -19,4 +19,4 @@
          [:tbody
           (map (fn [album]
                  ^{:key (str "album-" (:id album))}
-                 [album-row album]) albums)]]]])))
+                 [album-row album]) @albums)]]]])))
