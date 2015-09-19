@@ -14,6 +14,13 @@
   :db.install/_attribute :db.part/db}
 
  {:db/id #db/id[:db.part/db]
+  :db/ident :artist/bio
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "Artist's bio'"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
   :db/ident :artist/type
   :db/valueType :db.type/ref
   :db/cardinality :db.cardinality/one
@@ -60,6 +67,13 @@
   :db/valueType :db.type/ref
   :db/cardinality :db.cardinality/one
   :db/doc "Album type, eg LP or single"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :album/bio
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "Album info blurb"
   :db.install/_attribute :db.part/db}
 
  {:db/id #db/id[:db.part/db]

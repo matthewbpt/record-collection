@@ -20,3 +20,6 @@
   (add-album "Blues Breakers with Eric Clapton" "John Mayall & the Bluesbreakers"))
 
 (add-example-data)
+
+(add-artist "Steven Wilson")
+(add-artist "Joni Mitchell")

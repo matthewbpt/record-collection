@@ -7,7 +7,7 @@
             [markdown.core :refer [md->html]]
             [ajax.core :refer [GET POST]]
             [record-collection.api :refer [init]]
-            [record-collection.views.homepage :refer [artists search]])
+            [record-collection.views.homepage :refer [artists search artist-view]])
   (:import goog.History))
 
 
@@ -51,9 +51,14 @@
    [(search :filter)]
    [artists]])
 
+(defn artist-page []
+  [:div.container
+   [artist-view]])
+
 (def pages
   {:home #'home-page
-   :about #'about-page})
+   :about #'about-page
+   :artist #'artist-page})
 
 (defn page []
   [(pages (session/get :page))])
@@ -67,6 +72,9 @@
 
 (secretary/defroute "/about" []
   (session/put! :page :about))
+
+(secretary/defroute "/artist/:artist" [artists]
+  (session/put! :page :artist))
 
 ;; -------------------------
 ;; History
