@@ -50,7 +50,7 @@
 
 (defn home-page []
   [:div.container
-   [(search :filter)]
+   [search :filter]
    [artists]])
 
 (defn artist-page []

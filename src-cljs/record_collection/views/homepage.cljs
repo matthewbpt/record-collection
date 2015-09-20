@@ -8,7 +8,7 @@
     (dispatch [key (-> event .-target .-value)])))
 
 (defn search [key]
-  (fn []
+  (fn [key]
     [:div {:class "search"}
      [:input {:placeholder "Enter Search"
               :on-change  (on-event-trigger key)}]]))
