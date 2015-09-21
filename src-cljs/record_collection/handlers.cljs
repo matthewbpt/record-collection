@@ -17,7 +17,7 @@
 (register-handler
   :get-artists
   (fn [db _]
-    (go (let [response (<! (http/get "/api/artists"))
+    (go (let [response (<! (http/get "/api/artists" {:headers {"Accept" "application/edn"}}))
               artists (:body response)
               status (:status response)]
           (if (= status 200)
@@ -35,7 +35,7 @@
     (let [url (if (nil? artist)
                 "/api/albums"
                 (str "/api/artist/" artist "/albums"))]
-      (go (let [response (<! (http/get url))
+      (go (let [response (<! (http/get url {:headers {"Accept" "application/edn"}}))
                 albums (:body response)
                 status (:status response)]
             (if (= status 200)

@@ -4,14 +4,56 @@
   :artist/bio "Lorem ipsum blah etc"
   :artist/type :artist.type/person}
 
- {:db/id #db/id[:db.part/user -1000002]
-  :album/title "Slowhand"
+ {:db/id #db/id[:db.part/user]
+  :album/title "Backless"
   :album/year 1977
   :album/type :album.type/LP
   :album/artists #db/id[:db.part/user -1000001]}
 
- {:db/id #db/id[:db.part/user -1000003]
+ {:db/id #db/id[:db.part/user]
   :album/title "461 Ocean Boulevard"
+  :album/year 1974
+  :album/type :album.type/LP
+  :album/artists #db/id[:db.part/user -1000001]}
+
+ {:db/id #db/id[:db.part/user]
+  :album/title "From The Cradle"
+  :album/year 1974
+  :album/type :album.type/LP
+  :album/artists #db/id[:db.part/user -1000001]}
+
+ {:db/id #db/id[:db.part/user]
+  :album/title "Just One Night"
+  :album/year 1974
+  :album/type :album.type/LP
+  :album/artists #db/id[:db.part/user -1000001]}
+
+ {:db/id #db/id[:db.part/user]
+  :album/title "Me and Mr Johnson"
+  :album/year 1974
+  :album/type :album.type/LP
+  :album/artists #db/id[:db.part/user -1000001]}
+
+ {:db/id #db/id[:db.part/user]
+  :album/title "Money and Cigarettes"
+  :album/year 1974
+  :album/type :album.type/LP
+  :album/artists #db/id[:db.part/user -1000001]}
+
+ {:db/id #db/id[:db.part/user]
+  :album/title "No Reason to Cry"
+  :album/year 1974
+  :album/type :album.type/LP
+  :album/artists #db/id[:db.part/user -1000001]}
+
+ {:db/id #db/id[:db.part/user]
+  :album/title "Riding With the King"
+  :album/year 1974
+  :album/type :album.type/LP
+  :album/artists #db/id[:db.part/user -1000001]}
+
+ {:db/id #db/id[:db.part/user]
+  :album/title "The Cream of Eric Clapton"
   :album/year 1974
   :album/type :album.type/LP
   :album/artists #db/id[:db.part/user -1000001]}
@@ -47,7 +89,7 @@
   :artist/type :artist.type/person}
 
  {:db/id #db/id[:db.part/user]
-  :album/title "Deadwing"
+  :album/title "Recordings"
   :album/year 1968
   :album/type :album.type/LP
   :album/artists #db/id[:db.part/user -1000008]}

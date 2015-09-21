@@ -15,7 +15,7 @@
   :albums
   (fn [db [_ {id :id}]]
     (let [albums (reaction (:albums @db))
-          filtered-albums (reaction (filter #(contains? (set (:artists %)) id) @albums))]
+          filtered-albums (reaction (filter #(contains? (:artists %) id) @albums))]
       (reaction @filtered-albums))))
 
 (register-sub

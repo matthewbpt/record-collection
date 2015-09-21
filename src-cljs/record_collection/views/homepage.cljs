@@ -8,33 +8,28 @@
     (dispatch [key (-> event .-target .-value)])))
 
 (defn search [key]
-  (fn [key]
-    [:div {:class "search"}
-     [:input {:placeholder "Enter Search"
-              :on-change  (on-event-trigger key)}]]))
+  (fn search-renderer [key]
+    [:div.search>input {:placeholder "Enter Search"
+                        :on-change  (on-event-trigger key)}]))
 
 (defn artists-header []
-  [:div [:thead
-         [:th.col-md-2 "Artists"]]])
+  [:div>thead>th.col-md-2 "Artists"])
 
 (defn artist-row []
-  (fn [artist]
-    [:tr {}
-     [:td.col-md-2 [:a {:href (str "#/artist/" (:name artist))} (:name artist)]]]))
+  (fn artist-row-renderer [artist]
+    [:tr>td.col-md-2>a
+     {:href (str "#/artist/" (:name artist))}
+     (:name artist)]))
 
 (defn artists []
   (let [artists (subscribe [:filtered-artists])]
     (fn []
-      [:div
-       [:div
-        [:table.table
-         [artists-header]
-         [:tbody
-          (map (fn [artist]
-                 ^{:key (str "artist-" (:id artist))}
-                 [artist-row artist]) @artists)
-          ]]]]
-      )))
+      [:div>div>table.table
+       [artists-header]
+       [:tbody
+        (map (fn [artist]
+               ^{:key (str "artist-" (:id artist))}
+               [artist-row artist]) @artists)]])))
 
 
 

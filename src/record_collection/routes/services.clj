@@ -5,12 +5,6 @@
             [record-collection.db.query :refer :all]
             [record-collection.db.transact :refer :all]))
 
-(s/defschema Thingie {:id Long
-                      :hot Boolean
-                      :tag (s/enum :kikka :kukka)
-                      :chief [{:name String
-                               :type #{{:id String}}}]})
-
 (s/defschema Artist {:id Long
                      :name String
                      :bio String})
