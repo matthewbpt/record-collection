@@ -16,6 +16,16 @@
                      (d/db conn))]
     (map match-artist-attrs artists)))
 
+(defn get-artist
+  [artist-name]
+  (let [artist (d/q '[:find [(pull ?aid [:db/id :artist/name :artist/bio])]
+                      :in $ ?artist-name
+                      :where [?aid :artist/name ?artist-name]]
+                    (d/db conn)
+                    artist-name)]
+    (match-artist-attrs (first artist))))
+
+
 (defn get-artist-id [artist-name]
   (d/q '[:find ?aid .
          :in $ ?artist-name

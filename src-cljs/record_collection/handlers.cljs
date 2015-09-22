@@ -10,6 +10,11 @@
             [clojure.string :refer [blank?]]))
 
 (register-handler
+  :initdb
+  (fn [db _]
+    (merge db { :filter "" :current-artists [] :current-artist nil })))
+
+(register-handler
   :filter
   (fn [db [_ filter]]
     (merge db {:filter filter})))
@@ -46,3 +51,23 @@
   :current-artists
   (fn [db [_ artists]]
     (merge db {:current-artists artists})))
+
+(register-handler
+  :current-artist
+  (fn [db [_ artist-name]]
+    (merge db {:current-artist artist-name})))
+
+(register-handler
+  :add-artist-response
+  (fn [db [_ artist]]
+    (merge db {:current-artists (cons artist (:current-artists db))})))
+
+(register-handler
+  :add-artist
+  (fn [db [_ artist]]
+    (go (let [response (<! (http/post "/api/artist" {:edn-params artist :headers {"Accept" "application/edn"}}))
+              status (:status response)
+              artist (:body response)]
+          (if (= status 200)
+            (dispatch [:add-artist-response artist]))))
+    db))

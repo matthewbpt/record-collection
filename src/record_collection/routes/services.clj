@@ -10,8 +10,8 @@
                      :bio String})
 
 (s/defschema Album {:id Long
-                     :title String
-                     :year Long
+                    :title String
+                    :year Long
                     :artists #{Long}})
 
 (defapi service-routes
@@ -27,6 +27,11 @@
                   :return [Artist]
                   (get-artists))
 
+            (GET* "/artist/:name" []
+                  :return Artist
+                  :path-params [name :- String]
+                  (ok (get-artist name)))
+
             (GET* "/artist/:name/albums" []
                   :return [Album]
                   :path-params [name :- String]
@@ -36,58 +41,9 @@
                   :return [Album]
                   (ok (get-albums)))
 
-            ;(GET* "/plus" []
-            ;      :return       Long
-            ;      :query-params [x :- Long, {y :- Long 1}]
-            ;      :summary      "x+y with query-parameters. y defaults to 1."
-            ;      (ok (+ x y)))
-            ;
-            ;(POST* "/minus" []
-            ;       :return      Long
-            ;       :body-params [x :- Long, y :- Long]
-            ;       :summary     "x-y with body-parameters."
-            ;       (ok (- x y)))
-            ;
-            ;(GET* "/times/:x/:y" []
-            ;      :return      Long
-            ;      :path-params [x :- Long, y :- Long]
-            ;      :summary     "x*y with path-parameters"
-            ;      (ok (* x y)))
-            ;
-            ;(POST* "/divide" []
-            ;       :return      Double
-            ;       :form-params [x :- Long, y :- Long]
-            ;       :summary     "x/y with form-parameters"
-            ;       (ok (/ x y)))
-            ;
-            ;(GET* "/power" []
-            ;      :return      Long
-            ;      :header-params [x :- Long, y :- Long]
-            ;      :summary     "x^y with header-parameters"
-            ;      (ok (long (Math/pow x y))))
-            ;
-            ;(PUT* "/echo" []
-            ;      :return   [{:hot Boolean}]
-            ;      :body     [body [{:hot Boolean}]]
-            ;      :summary  "echoes a vector of anonymous hotties"
-            ;      (ok body))
-            ;
-            ;(POST* "/echo" []
-            ;       :return   (s/maybe Thingie)
-            ;       :body     [thingie (s/maybe Thingie)]
-            ;       :summary  "echoes a Thingie from json-body"
-            ;       (ok thingie))
-            )
-
-  ;(context* "/context" []
-  ;          :tags ["context*"]
-  ;          :summary "summary inherited from context"
-  ;          (context* "/:kikka" []
-  ;                    :path-params [kikka :- s/Str]
-  ;                    :query-params [kukka :- s/Str]
-  ;                    (GET* "/:kakka" []
-  ;                          :path-params [kakka :- s/Str]
-  ;                          (ok {:kikka kikka
-  ;                               :kukka kukka
-  ;                               :kakka kakka}))))
-        )
+            (POST* "/artist" []
+                   :return Artist
+                   :body [artist Artist]
+                   (ok (do
+                         (add-artist artist)
+                         (get-artist (:name artist)))))))

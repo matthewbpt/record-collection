@@ -9,7 +9,8 @@
             [record-collection.api :refer [init]]
             [record-collection.views.homepage :refer [artists search]]
             [record-collection.views.artist :refer [artist-view]]
-            [re-frame.core :refer [dispatch]] )
+            [record-collection.views.add-artist :refer [add-artist-form]]
+            [re-frame.core :refer [dispatch-sync]] )
   (:import goog.History))
 
 
@@ -40,7 +41,8 @@
          (when-not @collapsed? {:class "in"})
          [:ul.nav.navbar-nav
           [nav-link "#/" "Home" :home collapsed?]
-          [nav-link "#/about" "About" :about collapsed?]]]]])))
+          [nav-link "#/about" "About" :about collapsed?]
+          [nav-link "#/artist/add" "Add Artist" :add-artist collapsed?]]]]])))
 
 (defn about-page []
   [:div.container
@@ -54,14 +56,18 @@
    [artists]])
 
 (defn artist-page []
-  (let [artist-name (session/get! :artist)]
-    [:div.container
-     [artist-view artist-name]]))
+  [:div.container
+   [artist-view]])
+
+(defn add-artist-page []
+  [:div.container
+   [add-artist-form]])
 
 (def pages
   {:home #'home-page
    :about #'about-page
-   :artist #'artist-page})
+   :artist #'artist-page
+   :add-artist #'add-artist-page})
 
 (defn page []
   [(pages (session/get :page))])
@@ -76,8 +82,11 @@
 (secretary/defroute "/about" []
   (session/put! :page :about))
 
+(secretary/defroute "/artist/add" []
+  (session/put! :page :add-artist))
+
 (secretary/defroute "/artist/:artist" [artist]
-  (session/put! :artist artist)
+  (dispatch-sync [:current-artist artist])
   (session/put! :page :artist))
 
 ;; -------------------------

@@ -3,23 +3,15 @@
             [record-collection.db.core :refer :all]
             [record-collection.db.query :refer :all]))
 
-(defn add-artist [artist-name]
-  @(d/transact conn [{:db/id (d/tempid :db.part/user)
-                     :artist/name artist-name}]))
+(defn add-artist [artist]
+  @(d/transact conn (vec (filter (complement nil?)
+                                 [{:db/id       #db/id[:db.part/user -100001]
+                                   :artist/name (:name artist)}
+                                  (if (not-empty (:bio artist))
+                                    {:db/id      #db/id[:db.part/user -100001]
+                                     :artist/bio (:bio artist)})]))))
 
 (defn add-album [album-title artist-name]
-  @(d/transact conn [{:db/id (d/tempid :db.part/user)
-                      :album/title album-title
+  @(d/transact conn [{:db/id         #db/id[:db.part/user -100001]
+                      :album/title   album-title
                       :album/artists (get-artist-id artist-name)}]))
-
-;(defn add-example-data []
-;  (add-artist "Eric Clapton")
-;  (add-album "Slowhand" "Eric Clapton")
-;  (add-album "461 Ocean Boulevard" "Eric Clapton")
-;  (add-artist "John Mayall & the Bluesbreakers")
-;  (add-album "Blues Breakers with Eric Clapton" "John Mayall & the Bluesbreakers"))
-
-;(add-example-data)
-
-;(add-artist "Steven Wilson")
-;(add-artist "Joni Mitchell")

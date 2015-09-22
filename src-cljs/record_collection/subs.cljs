@@ -1,6 +1,6 @@
 (ns record-collection.subs
   (:require-macros [reagent.ratom :refer [reaction]])
-  (:require [re-frame.core :refer [register-sub]]
+  (:require [re-frame.core :refer [register-sub subscribe]]
             [clojure.string :refer [blank?]]))
 
 
@@ -33,3 +33,9 @@
   (fn [db [_ artist-name]]
     (let [items (reaction (:current-artists @db))]
       (reaction (first (filter #(= (:name %) artist-name) @items))))))
+
+(register-sub
+  :current-artist
+  (fn [db _]
+    (let [artist-name (reaction (:current-artist @db))]
+      (subscribe [:artist @artist-name]))))

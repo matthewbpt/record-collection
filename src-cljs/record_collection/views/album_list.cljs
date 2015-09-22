@@ -1,13 +1,10 @@
 (ns record-collection.views.album-list
-  (:require [re-frame.core :refer [dispatch
-                                   dispatch-sync
-                                   subscribe]]))
+  (:require [re-frame.core :refer [subscribe]]))
 
 (defn album-row [album]
-  (fn album-row-renderer [album]
-    [:tr
-     [:td.col-md-2 (:title album)]
-     [:td.col-md-2 (:year album)]]))
+  [:tr
+   [:td.col-md-2 (:title album)]
+   [:td.col-md-2 (:year album)]])
 
 (defn albums [artist]
   (fn albums-renderer [artist]

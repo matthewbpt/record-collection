@@ -18,16 +18,16 @@
 (expect #{ "John" "Paul" "George" }
         (with-redefs [conn (create-empty-in-memory-db)]
           (do
-            (add-artist "John")
-            (add-artist "Paul")
-            (add-artist "George")
+            (add-artist {:name "John"})
+            (add-artist {:name "Paul"})
+            (add-artist {:name "George"})
             (set (map #(:name %) (get-artists))))))
 
 ;; expect getting artist from id to yield correct artist
 (expect "John"
             (with-redefs [conn (create-empty-in-memory-db)]
               (do
-                (add-artist "John")
+                (add-artist {:name "John"})
                 (let [id (get-artist-id "John")]
                   (get-artist-name-from-id id)))))
 
@@ -35,8 +35,8 @@
 (expect #{"Slowhand" "461 Ocean Boulevard"}
         (with-redefs [conn (create-empty-in-memory-db)]
           (do
-            (add-artist "Eric Clapton")
-            (add-artist "John")
+            (add-artist {:name "Eric Clapton"})
+            (add-artist {:name "John"})
             (add-album "Slowhand" "Eric Clapton")
             (add-album "461 Ocean Boulevard" "Eric Clapton")
             (add-album "Test" "John")
@@ -47,6 +47,13 @@
 (expect #{"John"}
         (with-redefs [conn (create-empty-in-memory-db)]
           (do
-            (add-artist "John")
-            (add-artist "John")
+            (add-artist {:name "John"})
+            (add-artist {:name "John"})
             (set (map #(:name %) (get-artists))))))
+
+;; test get-artist function as well as martch-artists-attrs
+(expect {:name "John" :bio "once upon a time"}
+        (in (with-redefs [conn (create-empty-in-memory-db)]
+              (do
+                (add-artist {:name "John" :bio "once upon a time"})
+                (get-artist "John")))))
