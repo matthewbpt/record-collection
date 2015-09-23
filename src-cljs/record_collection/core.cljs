@@ -41,8 +41,8 @@
          (when-not @collapsed? {:class "in"})
          [:ul.nav.navbar-nav
           [nav-link "#/" "Home" :home collapsed?]
-          [nav-link "#/about" "About" :about collapsed?]
-          [nav-link "#/artist/add" "Add Artist" :add-artist collapsed?]]]]])))
+          [nav-link "#/artist/add" "Add Artist" :add-artist collapsed?]
+          [nav-link "#/about" "About" :about collapsed?]]]]])))
 
 (defn about-page []
   [:div.container

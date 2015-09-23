@@ -3,22 +3,22 @@
             [record-collection.db.core :refer :all]))
 
 (defn- match-artist-attrs
-  [{id :db/id name :artist/name bio :artist/bio}]
-    {:id id :name name :bio bio})
+  [{id :db/id name :artist/name bio :artist/bio sortName :artist/sortName}]
+  {:id id :name name :bio (if (empty? bio) "" bio) :sortName (if (empty? sortName) name sortName)})
 
 (defn- match-album-attrs
   [{id :db/id title :album/title year :album/year artists :album/artists}]
     {:id id :title title :year year :artists (set (map :db/id artists))})
 
 (defn get-artists []
-  (let [artists (d/q '[:find  [(pull ?aid [:db/id :artist/name :artist/bio]) ...]                              ;?aid ?artist-name ?bio
+  (let [artists (d/q '[:find  [(pull ?aid [:db/id :artist/name :artist/bio :artist/sortName]) ...]                              ;?aid ?artist-name ?bio
                        :where [?aid :artist/name _]]
                      (d/db conn))]
     (map match-artist-attrs artists)))
 
 (defn get-artist
   [artist-name]
-  (let [artist (d/q '[:find [(pull ?aid [:db/id :artist/name :artist/bio])]
+  (let [artist (d/q '[:find [(pull ?aid [:db/id :artist/name :artist/bio :artist/sortName])]
                       :in $ ?artist-name
                       :where [?aid :artist/name ?artist-name]]
                     (d/db conn)

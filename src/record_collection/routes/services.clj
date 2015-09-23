@@ -7,7 +7,8 @@
 
 (s/defschema Artist {:id Long
                      :name String
-                     :bio String})
+                     :bio String
+                     :sortName String})
 
 (s/defschema Album {:id Long
                     :title String

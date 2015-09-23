@@ -25,8 +25,8 @@
           s (reaction (:filter @db))]
       (reaction
         (if (empty? @s)
-          @items
-          (vec (filter #(> (.indexOf (-> % :name .toLowerCase) (.toLowerCase @s)) -1) @items)))))))
+          (sort-by :sortName @items)
+          (sort-by :sortName (filter #(> (.indexOf (-> % :name .toLowerCase) (.toLowerCase @s)) -1) @items)))))))
 
 (register-sub
   :artist

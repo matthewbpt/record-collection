@@ -1,6 +1,6 @@
 (ns record-collection.views.add-artist
   (:require [re-frame.core :refer [subscribe dispatch]]
-            [reagent-forms.core :refer [bind-fields init-field value-of]]
+            [reagent-forms.core :refer [bind-fields]]
             [reagent.core :refer [atom]]))
 
 (def form-template
@@ -16,8 +16,8 @@
     ]])
 
 (defn add-artist-form []
-  (fn add-artist-form-renderer []
-    (let [artist (atom {:id 0 :name "" :bio ""})]
+  (let [artist (atom {:id 0 :name "" :bio "" :sortName ""})]
+    (fn add-artist-form-renderer []
       [:div
        [bind-fields form-template artist]
        [:button.btn.btn-primary

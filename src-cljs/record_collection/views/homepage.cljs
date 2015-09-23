@@ -1,6 +1,5 @@
 (ns record-collection.views.homepage
   (:require [re-frame.core :refer [dispatch
-                                   dispatch-sync
                                    subscribe]]))
 
 (defn on-event-trigger [key]
@@ -9,10 +8,7 @@
 
 (defn search [key]
   [:div.search>input {:placeholder "Enter Search"
-                      :on-change  (on-event-trigger key)}])
-
-;(defn artists-header []
-;  [:div>thead>th.col-md-2 "Artists"])
+                      :on-change   (on-event-trigger key)}])
 
 (defn artist-row [artist]
   [:tr>td.col-md-2>a
@@ -25,9 +21,9 @@
       [:div>div>table.table
        [:div>thead>th.col-md-2 "Artists"]
        [:tbody
-          (map (fn [artist]
-                 ^{:key (str "artist-" (:id artist))}
-                 [artist-row artist]) @artists)]])))
+        (map (fn [artist]
+               ^{:key (str "artist-" (:id artist))}
+               [artist-row artist]) @artists)]])))
 
 
 

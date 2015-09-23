@@ -7,12 +7,13 @@
 (defn artist-view []
   (let [artist (subscribe [:current-artist])]
     (fn artist-view-renderer []
-      [:div.row>div.media
-       [:div.media-left>img.col-md-3
-        {:src thumbnail :style {:height "200px" :width "200px" :display "block"}}]
-       [:div.media-body
-        [:h3.media-heading (:name @artist)]
-        [:br]
-        [:p (:bio @artist)]]
-       [:br]
+      [:div
+       [:div.row>div.media
+        [:div.media-left>img.col-md-3
+         {:src thumbnail :style {:height "200px" :width "200px" :display "block"}}]
+        [:div.media-body
+         [:h3.media-heading (:name @artist)]
+         [:br]
+         [:p (:bio @artist)]]
+        [:br]]
        [albums @artist]])))
