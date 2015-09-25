@@ -71,3 +71,13 @@
           (if (= status 200)
             (dispatch [:add-artist-response artist]))))
     db))
+
+(register-handler
+  :add-album
+  (fn [db [_ album]]
+    (.log js/console album)
+    (let [new-album (assoc album :artists (set [(:artist album)]))
+          current-albums (:albums db)
+          new-albums (cons new-album current-albums)]
+      (.log js/console new-album)
+      (merge db {:albums new-albums}))))

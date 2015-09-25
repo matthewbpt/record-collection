@@ -10,6 +10,7 @@
             [record-collection.views.homepage :refer [artists search]]
             [record-collection.views.artist :refer [artist-view]]
             [record-collection.views.add-artist :refer [add-artist-form]]
+            [record-collection.views.add-album :refer [add-album-form]]
             [re-frame.core :refer [dispatch-sync]] )
   (:import goog.History))
 
@@ -42,6 +43,7 @@
          [:ul.nav.navbar-nav
           [nav-link "#/" "Home" :home collapsed?]
           [nav-link "#/artist/add" "Add Artist" :add-artist collapsed?]
+          [nav-link "#/album/add" "Add Album" :add-album collapsed?]
           [nav-link "#/about" "About" :about collapsed?]]]]])))
 
 (defn about-page []
@@ -63,11 +65,16 @@
   [:div.container
    [add-artist-form]])
 
+(defn add-album-page []
+  [:div.container
+   [add-album-form]])
+
 (def pages
   {:home #'home-page
    :about #'about-page
    :artist #'artist-page
-   :add-artist #'add-artist-page})
+   :add-artist #'add-artist-page
+   :add-album #'add-album-page})
 
 (defn page []
   [(pages (session/get :page))])
@@ -84,6 +91,9 @@
 
 (secretary/defroute "/artist/add" []
   (session/put! :page :add-artist))
+
+(secretary/defroute "/album/add" []
+  (session/put! :page :add-album))
 
 (secretary/defroute "/artist/:artist" [artist]
   (dispatch-sync [:current-artist artist])
