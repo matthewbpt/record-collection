@@ -73,11 +73,19 @@
     db))
 
 (register-handler
-  :add-album
+  :add-album-response
   (fn [db [_ album]]
-    (.log js/console album)
-    (let [new-album (assoc album :artists (set [(:artist album)]))
-          current-albums (:albums db)
-          new-albums (cons new-album current-albums)]
-      (.log js/console new-album)
+    (let [current-albums (:albums db)
+          new-albums (cons album current-albums)]
       (merge db {:albums new-albums}))))
+
+(register-handler
+  :add-album
+  (fn [db [_ album]]    
+    (go (let [new-album (dissoc (assoc album :artists #{(:artist album)}) :artist)
+              response (<! (http/post "/api/album" {:edn-params new-album :headers {"Accept" "application/edn"}}))
+              status (:status response)
+              album (:body response)]      
+          (if (= status 200)
+            (dispatch [:add-album-response album]))))
+    db))

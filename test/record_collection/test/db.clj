@@ -37,9 +37,10 @@
           (do
             (add-artist {:name "Eric Clapton"})
             (add-artist {:name "John"})
-            (add-album "Slowhand" "Eric Clapton")
-            (add-album "461 Ocean Boulevard" "Eric Clapton")
-            (add-album "Test" "John")
+            (add-album {:title "Slowhand" :artists #{(get-artist-id "Eric Clapton")}})
+            (add-album {:title "461 Ocean Boulevard" :artists #{(get-artist-id "Eric Clapton")}});"461 Ocean Boulevard" "Eric Clapton")
+            (add-album {:title "Test" :artists #{(get-artist-id "John")}});"Test" "John")
+            ;(add-album {:id 0, :title "Reptile", :year 2000, :artists #{(get-artist-id "Eric Clapton")}})
             (set (map #(:title %) (get-albums "Eric Clapton"))))))
 
 ;; artist is unique, so adding same artist multiple times should
