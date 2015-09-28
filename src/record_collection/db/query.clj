@@ -3,12 +3,12 @@
             [record-collection.db.core :refer :all]))
 
 (defn- match-artist-attrs
-  [{id :db/id name :artist/name bio :artist/bio sortName :artist/sortName}]
+  [{id :db/id name :artist/name bio :artist/bio sortName :artist/sortName image :artist/image}]
   {:id id 
    :name name 
    :bio (if (empty? bio) "" bio) 
    :sortName (if (empty? sortName) name sortName) 
-   })
+   :image-id (if (empty? image) nil (:db/id image))})
 
 (defn- match-album-attrs
   [{id :db/id title :album/title year :album/year artists :album/artists albumCover :album/cover}]
@@ -19,14 +19,14 @@
      :album-cover-id (if (empty? albumCover) nil (:db/id albumCover))})
 
 (defn get-artists []
-  (let [artists (d/q '[:find  [(pull ?aid [:db/id :artist/name :artist/bio :artist/sortName]) ...]                              ;?aid ?artist-name ?bio
+  (let [artists (d/q '[:find  [(pull ?aid [*]) ...]                              ;?aid ?artist-name ?bio
                        :where [?aid :artist/name _]]
                      (d/db conn))]
     (map match-artist-attrs artists)))
 
 (defn get-artist
   [artist-name]
-  (let [artist (d/q '[:find [(pull ?aid [:db/id :artist/name :artist/bio :artist/sortName])]
+  (let [artist (d/q '[:find [(pull ?aid [*])]
                       :in $ ?artist-name
                       :where [?aid :artist/name ?artist-name]]
                     (d/db conn)
@@ -78,9 +78,23 @@
        (d/db conn)
        album-id))
 
+(defn get-artist-image-id [artist-id]
+  (d/q '[:find ?cover-id .
+         :in $ ?aid
+         :where [?aid :artist/image ?cover-id]]
+       (d/db conn)
+       artist-id))
+
 (defn get-image [image-id]
   (d/q '[:find ?image .
          :in $ ?iid
          :where [?iid :image/bytes ?image]]
+       (d/db conn)
+       image-id))
+
+(defn get-image-type [image-id]
+  (d/q '[:find ?image-type .
+         :in $ ?iid
+         :where [?iid :image/type ?image-type]]
        (d/db conn)
        image-id))

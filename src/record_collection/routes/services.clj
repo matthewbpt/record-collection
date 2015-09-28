@@ -10,7 +10,8 @@
 (s/defschema Artist {:id Long
                      :name String
                      :bio String
-                     :sortName String})
+                     :sortName String
+                     :image-id (s/maybe Long)})
 
 (s/defschema Album {:id Long
                     :title String
@@ -51,10 +52,9 @@
                   :return [Album]
                   (ok (get-albums)))
 
-            (GET* "/image/:id" []
-                  
+            (GET* "/image/:id" []                  
                   :path-params [id :- Long]
-                  (ok (new java.io.ByteArrayInputStream (get-image id))))
+                  (assoc (ok (new java.io.ByteArrayInputStream (get-image id))) :headers { "Content-Type" (get-image-type id)}))
             
             (POST* "/artist" []
                    :return Artist
@@ -77,4 +77,13 @@
                    (ok (do 
                            (add-album-cover id (assoc file :bytes (to-byte-array (:tempfile file))))
                            (get-cover-id id))))
+            
+            (POST* "/artist/:id/image" []
+                   :return Long
+                   :multipart-params [file :- upload/TempFileUpload]
+                   :path-params [id :- Long]
+                   :middlewares [upload/wrap-multipart-params]
+                   (ok (do 
+                           (add-artist-image id (assoc file :bytes (to-byte-array (:tempfile file))))
+                           (get-artist-image-id id))))
             ))

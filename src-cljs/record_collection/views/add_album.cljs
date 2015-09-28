@@ -36,12 +36,12 @@
 
 (defn add-album-form []
   (let [artists (subscribe [:current-artists])
-        album (atom {:id 0, :title "", :year 2015, :artist 0})
+        album (atom {:id 0, :title "", :year 2015, :artist 0, :album-cover-id nil})
         image-file (atom {:file ""})]
     (fn add-album-form-renderer
       []
       [:div
        [bind-fields (form-template @artists image-file) album]
        [:button.btn.btn-primary.pull-right
-        {:on-click #(dispatch [:add-album @album])}
+        {:on-click #(dispatch [:add-album @album @image-file])}
         "Add Album"]])))

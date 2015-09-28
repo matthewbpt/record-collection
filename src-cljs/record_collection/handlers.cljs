@@ -9,6 +9,12 @@
             [cljs.core.async :refer [<! >! chan]]
             [clojure.string :refer [blank?]]))
 
+(defn generate-form-data [params]
+  (let [form-data (js/FormData.)]
+    (doseq [[k v] params]
+      (.append form-data (name k) v))
+    form-data))
+
 (register-handler
   :initdb
   (fn [db _]
@@ -64,12 +70,17 @@
 
 (register-handler
   :add-artist
-  (fn [db [_ artist]]
+  (fn [db [_ artist image]]
     (go (let [response (<! (http/post "/api/artist" {:edn-params artist :headers {"Accept" "application/edn"}}))
               status (:status response)
               artist (:body response)]
           (if (= status 200)
-            (dispatch [:add-artist-response artist]))))
+            (go (let [image-response (<! (http/post (str "/api/artist/" (:id artist) "/image")
+                                                   {:body (generate-form-data {:file (:file image)})}))
+                      status (:status image-response)
+                      image-id (:body image-response)]
+                  (if (= status 200)
+                    (dispatch [:add-artist-response (assoc artist :image-id image-id)])))))))
     db))
 
 (register-handler
@@ -81,11 +92,17 @@
 
 (register-handler
   :add-album
-  (fn [db [_ album]]    
+  (fn [db [_ album cover]]    
     (go (let [new-album (dissoc (assoc album :artists #{(:artist album)}) :artist)
               response (<! (http/post "/api/album" {:edn-params new-album :headers {"Accept" "application/edn"}}))
               status (:status response)
               album (:body response)]      
           (if (= status 200)
-            (dispatch [:add-album-response album]))))
+            (go (let [image-response (<! (http/post (str "/api/album/" (:id album) "/cover")
+                                                   {:body (generate-form-data {:file (:file cover)})}))
+                      status (:status image-response)
+                      image-id (:body image-response)]
+                  (if (= status 200)
+                    (dispatch [:add-album-response (assoc album :album-cover-id image-id)]))))
+            )))
     db))
