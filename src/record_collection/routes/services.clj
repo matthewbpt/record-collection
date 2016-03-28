@@ -36,7 +36,7 @@
 
             (GET* "/artists" []
                   :return [Artist]
-                  (get-artists))
+                   (get-artists))
 
             (GET* "/artist/:name" []
                   :return Artist
@@ -86,4 +86,11 @@
                    (ok (do 
                            (add-artist-image id (assoc file :bytes (to-byte-array (:tempfile file))))
                            (get-artist-image-id id))))
+            
+            (DELETE* "/artist" []
+                   :return Artist
+                   :body [artist Artist]
+                   (ok (do
+                         (delete-artist (:id artist))
+                         artist)))
             ))
