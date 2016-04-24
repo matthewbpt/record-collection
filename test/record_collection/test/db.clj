@@ -15,13 +15,13 @@
       conn)))
 
 ;; expect adding three artists to yield three artists in the database
-(expect #{ "John" "Paul" "George" }
+(expect #{ "John" "Paul" "George"}
         (with-redefs [conn (create-empty-in-memory-db)]
           (do
             (add-artist {:name "John"})
             (add-artist {:name "Paul"})
             (add-artist {:name "George"})
-            (set (map #(:name %) (get-artists))))))
+            (set (map :name (get-artists))))))
 
 ;; expect getting artist from id to yield correct artist
 (expect "John"
@@ -38,10 +38,16 @@
             (add-artist {:name "Eric Clapton"})
             (add-artist {:name "John"})
             (add-album {:title "Slowhand" :artists #{(get-artist-id "Eric Clapton")}})
-            (add-album {:title "461 Ocean Boulevard" :artists #{(get-artist-id "Eric Clapton")}});"461 Ocean Boulevard" "Eric Clapton")
-            (add-album {:title "Test" :artists #{(get-artist-id "John")}});"Test" "John")
-            ;(add-album {:id 0, :title "Reptile", :year 2000, :artists #{(get-artist-id "Eric Clapton")}})
-            (set (map #(:title %) (get-albums "Eric Clapton"))))))
+            (add-album {:title "461 Ocean Boulevard" :artists #{(get-artist-id "Eric Clapton")}})
+            (add-album {:title "Test" :artists #{(get-artist-id "John")}})
+            (set (map :title (get-albums "Eric Clapton"))))))
+
+(expect #{}
+        (with-redefs [conn (create-empty-in-memory-db)]
+          (do
+            (add-artist {:name "Eric Clapton"})
+            (delete-entity (get-artist-id "Eric Clapton"))
+            (set (map :title (get-artists))))))
 
 ;; artist is unique, so adding same artist multiple times should
 ;; only result in one artist of that name existing
@@ -50,7 +56,7 @@
           (do
             (add-artist {:name "John"})
             (add-artist {:name "John"})
-            (set (map #(:name %) (get-artists))))))
+            (set (map :name (get-artists))))))
 
 ;; test get-artist function as well as martch-artists-attrs
 (expect {:name "John" :bio "once upon a time"}

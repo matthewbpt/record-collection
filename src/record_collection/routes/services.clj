@@ -52,10 +52,10 @@
                   :return [Album]
                   (ok (get-albums)))
 
-            (GET* "/image/:id" []                  
+            (GET* "/image/:id" []
                   :path-params [id :- Long]
                   (assoc (ok (new java.io.ByteArrayInputStream (get-image id))) :headers { "Content-Type" (get-image-type id)}))
-            
+
             (POST* "/artist" []
                    :return Artist
                    :body [artist Artist]
@@ -68,29 +68,36 @@
                    (ok (do
                          (add-album album)
                          (get-album (:title album)))))
-            
+
             (POST* "/album/:id/cover" []
                    :return Long
                    :multipart-params [file :- upload/TempFileUpload]
                    :path-params [id :- Long]
                    :middlewares [upload/wrap-multipart-params]
-                   (ok (do 
+                   (ok (do
                            (add-album-cover id (assoc file :bytes (to-byte-array (:tempfile file))))
                            (get-cover-id id))))
-            
+
             (POST* "/artist/:id/image" []
                    :return Long
                    :multipart-params [file :- upload/TempFileUpload]
                    :path-params [id :- Long]
                    :middlewares [upload/wrap-multipart-params]
-                   (ok (do 
+                   (ok (do
                            (add-artist-image id (assoc file :bytes (to-byte-array (:tempfile file))))
                            (get-artist-image-id id))))
-            
+
             (DELETE* "/artist" []
                    :return Artist
                    :body [artist Artist]
                    (ok (do
-                         (delete-artist (:id artist))
+                         (delete-entity (:id artist))
                          artist)))
-            ))
+
+            (DELETE* "/delete" []
+                     :return Album
+                     :body [album Album]
+                     (ok (do
+                           (delete-entity (:id album))
+                           album)))))
+

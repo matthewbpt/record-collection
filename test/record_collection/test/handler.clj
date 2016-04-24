@@ -7,6 +7,8 @@
 
 (expect {:status 404} (in (app (request :get "invalid"))))
 
+(expect {:status 200} (in (app (request :get "/api/artists"))))
+
 ;(deftest test-app
 ;  (testing "main route"
 ;    (let [response (app (request :get "/"))]

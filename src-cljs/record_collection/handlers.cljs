@@ -76,7 +76,7 @@
               artist (:body response)]
           (if (= status 200)
             (go (let [image-response (<! (http/post (str "/api/artist/" (:id artist) "/image")
-                                                   {:body (generate-form-data {:file (:file image)})}))
+                                                   {:body (generate-form-data image)}))
                       status (:status image-response)
                       image-id (:body image-response)]
                   (if (= status 200)
@@ -99,7 +99,7 @@
               album (:body response)]      
           (if (= status 200)
             (go (let [image-response (<! (http/post (str "/api/album/" (:id album) "/cover")
-                                                   {:body (generate-form-data {:file (:file cover)})}))
+                                                   {:body (generate-form-data cover)}))
                       status (:status image-response)
                       image-id (:body image-response)]
                   (if (= status 200)
